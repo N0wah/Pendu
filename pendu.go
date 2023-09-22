@@ -3,6 +3,7 @@ package main
 import "fmt"
 
 func main() {
+	fmt.Printf("\x1b[2J")
 	reponse := "Salut"
 	runeReponse := []rune(reponse)
 	affichage := ""
@@ -29,14 +30,19 @@ func main() {
 		}
 		coups++
 		if erreur == 1 {
+			fmt.Printf("\x1b[2J")
 			Dessin1()
 		} else if erreur == 2 {
+			fmt.Printf("\x1b[2J")
 			Dessin2()
 		} else if erreur == 3 {
+			fmt.Printf("\x1b[2J")
 			Dessin3()
 		} else if erreur == 4 {
+			fmt.Printf("\x1b[2J")
 			Dessin4()
 		} else if erreur == 5 {
+			fmt.Printf("\x1b[2J")
 			Dessin5()
 			break
 		}
