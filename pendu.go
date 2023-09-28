@@ -18,16 +18,18 @@ const (
 )
 
 func main() {
-	motADeviner := "GOLANG"
+	motADeviner := "YNOVCAMPUS"
 	lettresDevinees := make([]bool, len(motADeviner))
 	lettreEntrer := ""
 	tentativesRestantes := 6
 	erreurs := 0
 
-	fmt.Println(Cyan + "===================================")
-	fmt.Println("Bienvenue dans le jeu du pendu !")
-	fmt.Printf("Le mot à deviner contient %d lettres.\n", len(motADeviner))
-	fmt.Println("===================================" + Reset)
+	fmt.Println(Cyan + "======================================================================================================================")
+    fmt.Println("Bienvenue dans notre jeu, aujourd'hui vous devez sauver la vie de notre amie codeur pour qu'il vous donne un indice !")
+    fmt.Println("Pour cela vous devez deviner le mot auquel le juge à penser pour lui éviter une pendaison.")
+    fmt.Printf("          Le mot à deviner contient %d lettres.\n", len(motADeviner))
+    fmt.Println("          À vous de jouer !!!")
+    fmt.Println("======================================================================================================================" + Reset)
 
 	for tentativesRestantes > 0 {
 		fmt.Println("\nMot actuel:", motMasque(motADeviner, lettresDevinees))
@@ -37,10 +39,20 @@ func main() {
 
 		fmt.Print("Entrez une lettre : ")
 		lettre := lireLettre()
+
+		if strings.Contains(lettreEntrer, lettre) {
+			fmt.Printf("\x1bc")
+			fmt.Printf("\x1b[2J")
+			fmt.Println("Veuillez entrer une lettre non utilisée.")
+			continue
+		}
 		if lettre == "" || len(lettre) != 1 {
+			fmt.Printf("\x1bc")
+			fmt.Printf("\x1b[2J")
 			fmt.Println("Veuillez entrer une seule lettre valide.")
 			continue
 		}
+		lettreEntrer += lettre
 
 		lettre = strings.ToUpper(lettre)
 
@@ -58,17 +70,17 @@ func main() {
 		}
 
 		if motMasque(motADeviner, lettresDevinees) == motADeviner {
-			fmt.Printf(Green+"\nFélicitations, vous avez deviné le mot : %s\n"+Reset, motADeviner)
-			break
-		}
-		lettreEntrer += lettre
+            fmt.Printf(Green+"\nFélicitations, vous avez deviné le mot : %s\n"+Reset, motADeviner)
+            fmt.Println(Green+"Grâce à vous notre ami codeur est libre et vous donne l'indice qui est le chiffre", Red+"2"+Reset)
+            break
+        }
 		fmt.Printf("\x1bc")
 		fmt.Printf("\x1b[2J")
 	}
 
 	if tentativesRestantes == 0 {
 		fmt.Println("   ____\n   |  |\n   O  |\n  /|\\ |\n  / \\ |\n      |\n=========")
-		fmt.Printf(Red+"\nDésolé, vous avez épuisé toutes vos tentatives. Le mot était : %s\n"+Reset, motADeviner)
+		fmt.Println(Red + "\nOh non, vous avez épuisé toutes nos chances, notre amie codeur est mort." + Reset)
 	}
 }
 func motMasque(mot string, lettresDevinees []bool) string {
