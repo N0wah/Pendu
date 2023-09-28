@@ -46,7 +46,7 @@ func main() {
 			fmt.Println(Red + "Veuillez entrer une lettre non utilisée." + Reset)
 			continue
 		}
-		if lettre == "" || len(lettre) != 1 {
+		if lettre == "" || len(lettre) != 1  || !IsAlpha(lettre){
 			fmt.Printf("\x1bc")
 			fmt.Printf("\x1b[2J")
 			fmt.Println(Red + "Veuillez entrer une seule lettre valide." + Reset)
@@ -116,4 +116,19 @@ func afficherPendu(erreurs int) {
 		"   ____\n   |  |\n   O  |\n  /|\\ |\n  / \\ |\n      |\n=========",
 	}
 	fmt.Println(pendu[erreurs])
+}
+
+func IsAlpha(s string) bool {
+	sRune := []rune(s)
+	count := 0
+	for i := range sRune {
+		if sRune[i] >= 'A' && sRune[i] <= 'Z' || sRune[i] >= 'a' && sRune[i] <= 'z' {
+			count++
+		}
+	}
+	if count == len(s) {
+		return true
+	} else {
+		return false
+	}
 }
