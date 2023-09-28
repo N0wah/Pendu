@@ -1,113 +1,105 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
+
+// Couleurs ANSI
+const (
+	Reset   = "\033[0m"
+	Red     = "\033[31m"
+	Green   = "\033[32m"
+	Yellow  = "\033[33m"
+	Blue    = "\033[34m"
+	Magenta = "\033[35m"
+	Cyan    = "\033[36m"
+	White   = "\033[37m"
+)
 
 func main() {
-	fmt.Printf("\x1b[2J")
-	reponse := "Salut"
-	runeReponse := []rune(reponse)
-	affichage := ""
-	for i := 0; i != len(reponse); i++ {
-		affichage = affichage + "_"
-	}
-	runeAffichage := []rune(affichage)
-	trouve := 0
-	coups := 0
-	erreur := 0
-	for trouve != len(reponse) {
-		var rep string
-		fmt.Println(string(runeAffichage))
-		fmt.Scanln(&rep)
-		trouveReg := trouve
-		for i := range runeReponse {
-			if rep == string(runeReponse[i]) {
-				runeAffichage[i] = runeReponse[i]
-				trouve++
+	motADeviner := "GOLANG"
+	lettresDevinees := make([]bool, len(motADeviner))
+	tentativesRestantes := 6
+	erreurs := 0
+
+	fmt.Println(Cyan + "===================================")
+	fmt.Println("Bienvenue dans le jeu du pendu !")
+	fmt.Printf("Le mot à deviner contient %d lettres.\n", len(motADeviner))
+	fmt.Println("===================================" + Reset)
+
+	for tentativesRestantes > 0 {
+		fmt.Println("\nMot actuel:", motMasque(motADeviner, lettresDevinees))
+		fmt.Printf("Tentatives restantes : %d\n", tentativesRestantes)
+		afficherPendu(erreurs)
+
+		fmt.Print("Entrez une lettre : ")
+		lettre := lireLettre()
+		if lettre == "" || len(lettre) != 1 {
+			fmt.Println("Veuillez entrer une seule lettre valide.")
+			continue
+		}
+
+		lettre = strings.ToUpper(lettre)
+
+		lettreRatée := true
+		for i, c := range motADeviner {
+			if lettre[0] == byte(c) {
+				lettresDevinees[i] = true
+				lettreRatée = false
 			}
 		}
-		if trouveReg == trouve {
-			erreur++
+
+		if lettreRatée {
+			tentativesRestantes--
+			erreurs++
 		}
-		coups++
-		if erreur == 1 {
-			fmt.Printf("\x1b[2J")
-			Dessin1()
-		} else if erreur == 2 {
-			fmt.Printf("\x1b[2J")
-			Dessin2()
-		} else if erreur == 3 {
-			fmt.Printf("\x1b[2J")
-			Dessin3()
-		} else if erreur == 4 {
-			fmt.Printf("\x1b[2J")
-			Dessin4()
-		} else if erreur == 5 {
-			fmt.Printf("\x1b[2J")
-			Dessin5()
+
+		if motMasque(motADeviner, lettresDevinees) == motADeviner {
+			fmt.Printf(Green+"\nFélicitations, vous avez deviné le mot : %s\n"+Reset, motADeviner)
 			break
 		}
+
+		fmt.Printf("\x1bc")
+		fmt.Printf("\x1b[2J")
 	}
-	fmt.Println(string(runeAffichage))
-	if string(runeAffichage) == string(runeReponse) {
-		fmt.Printf("Tu as trouvé la réponse en ")
-		fmt.Println(coups)
-	} else {
-		fmt.Println("Tu n'as pas trouvé, dommage !")
+
+	if tentativesRestantes == 0 {
+		fmt.Println("   ____\n   |  |\n   O  |\n  /|\\ |\n  / \\ |\n      |\n=========")
+		fmt.Printf(Red+"\nDésolé, vous avez épuisé toutes vos tentatives. Le mot était : %s\n"+Reset, motADeviner)
 	}
 }
-
-func Dessin1() {
-	fmt.Println("        ")
-	fmt.Println("        ")
-	fmt.Println("        ")
-	fmt.Println("        ")
-	fmt.Println("        ")
-	fmt.Println("        ")
-	fmt.Println("        ")
-	fmt.Println("________")
+func motMasque(mot string, lettresDevinees []bool) string {
+	motMasque := ""
+	for i, c := range mot {
+		if lettresDevinees[i] {
+			motMasque += string(c)
+		} else {
+			motMasque += "_"
+		}
+	}
+	return motMasque
 }
 
-func Dessin2() {
-
-	fmt.Println("       |")
-	fmt.Println("       |")
-	fmt.Println("       |")
-	fmt.Println("       |")
-	fmt.Println("       |")
-	fmt.Println("       |")
-	fmt.Println("       |")
-	fmt.Println("       |")
-	fmt.Println("________")
-}
-func Dessin3() {
-	fmt.Println(" _______|")
-	fmt.Println("        |")
-	fmt.Println("        |")
-	fmt.Println("        |")
-	fmt.Println("        |")
-	fmt.Println("        |")
-	fmt.Println("        |")
-	fmt.Println("_________")
+func lireLettre() string {
+	var lettre string
+	_, err := fmt.Scanln(&lettre)
+	if err != nil {
+		return ""
+	}
+	return lettre
 }
 
-func Dessin4() {
-	fmt.Println("_______|")
-	fmt.Println("   |   |")
-	fmt.Println("   0   |")
-	fmt.Println("       |")
-	fmt.Println("       |")
-	fmt.Println("       |")
-	fmt.Println("       |")
-	fmt.Println("________")
-}
-
-func Dessin5() {
-	fmt.Println(" _______|")
-	fmt.Println("    |   |")
-	fmt.Println("    0   |")
-	fmt.Println("   \\|/  |")
-	fmt.Println("    |   |")
-	fmt.Println("   / \\  |")
-	fmt.Println("        |")
-	fmt.Println("_________")
+func afficherPendu(erreurs int) {
+	pendu := []string{
+		"",
+		"   ____\n   |  |\n      |\n      |\n      |\n      |\n=========",
+		"   ____\n   |  |\n   O  |\n      |\n      |\n      |\n=========",
+		"   ____\n   |  |\n   O  |\n   |  |\n      |\n      |\n=========",
+		"   ____\n   |  |\n   O  |\n  /|  |\n      |\n      |\n=========",
+		"   ____\n   |  |\n   O  |\n  /|\\ |\n      |\n      |\n=========",
+		"   ____\n   |  |\n   O  |\n  /|\\ |\n  /   |\n      |\n=========",
+		"   ____\n   |  |\n   O  |\n  /|\\ |\n  / \\ |\n      |\n=========",
+	}
+	fmt.Println(pendu[erreurs])
 }
