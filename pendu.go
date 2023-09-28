@@ -20,6 +20,7 @@ const (
 func main() {
 	motADeviner := "GOLANG"
 	lettresDevinees := make([]bool, len(motADeviner))
+	lettreEntrer := ""
 	tentativesRestantes := 6
 	erreurs := 0
 
@@ -32,6 +33,7 @@ func main() {
 		fmt.Println("\nMot actuel:", motMasque(motADeviner, lettresDevinees))
 		fmt.Printf("Tentatives restantes : %d\n", tentativesRestantes)
 		afficherPendu(erreurs)
+		fmt.Println("Lettres déja utilisées : " + lettreEntrer)
 
 		fmt.Print("Entrez une lettre : ")
 		lettre := lireLettre()
@@ -59,7 +61,7 @@ func main() {
 			fmt.Printf(Green+"\nFélicitations, vous avez deviné le mot : %s\n"+Reset, motADeviner)
 			break
 		}
-
+		lettreEntrer += lettre
 		fmt.Printf("\x1bc")
 		fmt.Printf("\x1b[2J")
 	}
