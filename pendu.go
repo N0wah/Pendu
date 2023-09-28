@@ -25,11 +25,11 @@ func main() {
 	erreurs := 0
 
 	fmt.Println(Cyan + "======================================================================================================================")
-    fmt.Println("Bienvenue dans notre jeu, aujourd'hui vous devez sauver la vie de notre amie codeur pour qu'il vous donne un indice !")
-    fmt.Println("Pour cela vous devez deviner le mot auquel le juge à penser pour lui éviter une pendaison.")
-    fmt.Printf("          Le mot à deviner contient %d lettres.\n", len(motADeviner))
-    fmt.Println("          À vous de jouer !!!")
-    fmt.Println("======================================================================================================================" + Reset)
+	fmt.Println("Bienvenue dans notre jeu, aujourd'hui vous devez sauver la vie de notre amie codeur pour qu'il vous donne un indice !")
+	fmt.Println("Pour cela vous devez deviner le mot auquel le juge à penser pour lui éviter une pendaison.")
+	fmt.Printf("          Le mot à deviner contient %d lettres.\n", len(motADeviner))
+	fmt.Println("          À vous de jouer !!!")
+	fmt.Println("======================================================================================================================" + Reset)
 
 	for tentativesRestantes > 0 {
 		fmt.Println("\nMot actuel:", motMasque(motADeviner, lettresDevinees))
@@ -43,13 +43,13 @@ func main() {
 		if strings.Contains(lettreEntrer, lettre) {
 			fmt.Printf("\x1bc")
 			fmt.Printf("\x1b[2J")
-			fmt.Println("Veuillez entrer une lettre non utilisée.")
+			fmt.Println(Red + "Veuillez entrer une lettre non utilisée." + Reset)
 			continue
 		}
 		if lettre == "" || len(lettre) != 1 {
 			fmt.Printf("\x1bc")
 			fmt.Printf("\x1b[2J")
-			fmt.Println("Veuillez entrer une seule lettre valide.")
+			fmt.Println(Red + "Veuillez entrer une seule lettre valide." + Reset)
 			continue
 		}
 		lettreEntrer += lettre
@@ -70,10 +70,10 @@ func main() {
 		}
 
 		if motMasque(motADeviner, lettresDevinees) == motADeviner {
-            fmt.Printf(Green+"\nFélicitations, vous avez deviné le mot : %s\n"+Reset, motADeviner)
-            fmt.Println(Green+"Grâce à vous notre ami codeur est libre et vous donne l'indice qui est le chiffre", Red+"2"+Reset)
-            break
-        }
+			fmt.Printf(Green+"\nFélicitations, vous avez deviné le mot : %s\n"+Reset, motADeviner)
+			fmt.Println(Green+"Grâce à vous notre ami codeur est libre et vous donne l'indice qui est le chiffre", Red+"2"+Reset)
+			break
+		}
 		fmt.Printf("\x1bc")
 		fmt.Printf("\x1b[2J")
 	}
