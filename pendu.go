@@ -46,7 +46,7 @@ func main() {
 			fmt.Println(Red + "Veuillez entrer une lettre non utilisée." + Reset)
 			continue
 		}
-		if lettre == "" || len(lettre) != 1  || !IsAlpha(lettre){
+		if lettre == "" || len(lettre) != 1 || !IsAlpha(lettre) {
 			fmt.Printf("\x1bc")
 			fmt.Printf("\x1b[2J")
 			fmt.Println(Red + "Veuillez entrer une seule lettre valide." + Reset)
@@ -71,7 +71,7 @@ func main() {
 
 		if motMasque(motADeviner, lettresDevinees) == motADeviner {
 			fmt.Printf(Green+"\nFélicitations, vous avez deviné le mot : %s\n"+Reset, motADeviner)
-			fmt.Println(Green+"Grâce à vous notre ami codeur est libre et vous donne l'indice qui est le chiffre", Red+"2"+Reset)
+			fmt.Println(Green+"Grâce à vous notre ami codeur est libre et vous donne le code qui est : ", Red+"192.168.0.0"+Reset)
 			break
 		}
 		fmt.Printf("\x1bc")
